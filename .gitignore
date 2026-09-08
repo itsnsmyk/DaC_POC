@@ -42,3 +42,7 @@ venv/
 .idea/
 .vscode/
 *.swp
+provider_override.tf
+targets/vps-*.tfvars
+terraform/deployments/detections/state/
+.dac-env

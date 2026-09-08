@@ -1,10 +1,10 @@
 {
-  "namespace": "1b671a64-40d5-491e-99b0-da01ff1f3341",
+  "namespace": "78d5ddf7-7d5f-4e40-a98e-6b5e8dcee74d",
   "rules": {
-    "lnx-curl-download-to-tmp": "99b16cd9-6155-5258-8d2d-3c58bd3bb166",
+    "lnx-curl-download-to-tmp": "04273b1f-628a-5a96-81b9-e4b15a5c94bf",
     "threshold-ioc-network-intrusion-detection": "a4f1c2d3-9e8b-4a71-b0c5-1d2e3f4a5b6c",
-    "win-rdp-bruteforce-threshold": "9525b2c5-e3e0-5bf9-b294-221f53a165c3",
-    "win-svc-account-interactive-login": "01c9c3a1-618a-5147-a0fb-15b1450c9199"
+    "win-rdp-bruteforce-threshold": "b7e7092b-9e6f-55be-8044-2dbb58b557ea",
+    "win-svc-account-interactive-login": "bfa04bf9-5433-5694-b03e-cebfe66a9ad0"
   },
   "sources": {
     "lnx-curl-download-to-tmp": "derived",

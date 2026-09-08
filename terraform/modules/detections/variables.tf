@@ -36,7 +36,10 @@ variable "rule_id_namespace" {
 }
 
 variable "connector_ids" {
-  type        = map(string)
+  type = map(object({
+    id             = string
+    action_type_id = string
+  }))
   description = "Maps the logical connector name used in rule YAML (e.g. soc_pagerduty) to the real connector ID on THIS cluster."
   default     = {}
 }

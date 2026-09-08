@@ -1,5 +1,5 @@
-variable "cluster_role"          { type = string }
-variable "kibana_endpoint"       { type = string }
+variable "cluster_role" { type = string }
+variable "kibana_endpoint" { type = string }
 variable "elasticsearch_endpoint" { type = string }
 
 variable "kibana_ca_certs" {
@@ -19,7 +19,10 @@ variable "rule_id_namespace" {
 }
 
 variable "connector_ids" {
-  type    = map(string)
+  type = map(object({
+    id             = string
+    action_type_id = string
+  }))
   default = {}
 }
 

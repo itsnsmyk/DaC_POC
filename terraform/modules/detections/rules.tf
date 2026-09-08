@@ -82,7 +82,8 @@ resource "elasticstack_kibana_security_detection_rule" "this" {
   threat_index         = try(each.value.threat_index, null)
   threat_query         = try(each.value.threat_query, null)
   threat_mapping       = try(each.value.threat_mapping, null)
-  threat_language      = try(each.value.threat_language, null)
+  # unsupported by this provider version:
+  # threat_language      = try(each.value.threat_language, null)
   threat_indicator_path = try(each.value.threat_indicator_path, null)
 
   # saved_query rules
@@ -109,10 +110,10 @@ resource "elasticstack_kibana_security_detection_rule" "this" {
   # --- actions: logical connector name -> per-cluster connector id -----------
   actions = [
     for a in try(each.value.actions, []) : {
-      action_type_id = try(a.action_type_id, null)
-      id             = var.connector_ids[a.connector]
+      action_type_id = var.connector_ids[a.connector].action_type_id
+      id             = var.connector_ids[a.connector].id
       group          = try(a.group, "default")
-      params         = try(a.params, {})
+      params         = jsonencode(try(a.params, {}))
     }
   ]
 

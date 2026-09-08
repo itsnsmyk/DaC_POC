@@ -41,7 +41,7 @@ threat:
 exceptions:
 - svc-account-interactive-login
 actions:
-- connector: TODO_map_connector_4a1f2b8c
+- connector: soc_pagerduty
   group: default
   params:
     summary: '{{context.rule.name}}'
