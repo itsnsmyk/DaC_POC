@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://acme.example.com/schemas/detection-rule.schema.json",
+  "title": "Detection rule (source of truth)",
+  "type": "object",
+  "required": ["uid", "name", "description", "type", "severity", "risk_score"],
+  "additionalProperties": false,
+  "properties": {
+    "uid": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 4,
+      "maxLength": 80,
+      "description": "Immutable human-readable identity. Hashed into rule_id."
+    },
+    "rule_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "description": "Only for rules migrated from an existing Kibana deployment. Preserves the identity Kibana already has. Omit on new rules - it is derived from uid."
+    },
+    "name": { "type": "string", "minLength": 5, "maxLength": 128 },
+    "description": { "type": "string", "minLength": 20 },
+    "type": {
+      "enum": ["query", "saved_query", "eql", "esql", "threshold",
+               "threat_match", "machine_learning", "new_terms"]
+    },
+    "language": { "enum": ["kuery", "lucene", "eql", "esql"] },
+    "query": { "type": "string" },
+    "saved_id": { "type": "string" },
+    "index": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "filters": { "type": "array" },
+
+    "severity": { "enum": ["low", "medium", "high", "critical"] },
+    "risk_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "enabled": { "type": "boolean" },
+    "interval": { "type": "string", "pattern": "^\\d+[smhd]$" },
+    "from": { "type": "string", "pattern": "^now-\\d+[smhd]$" },
+    "to": { "type": "string" },
+    "max_signals": { "type": "integer", "minimum": 1, "maximum": 10000 },
+
+    "author": { "type": "array", "items": { "type": "string" } },
+    "license": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "false_positives": { "type": "array", "items": { "type": "string" } },
+    "references": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    },
+    "note": { "type": "string" },
+    "setup": { "type": "string" },
+
+    "threshold": {
+      "type": "object",
+      "required": ["field", "value"],
+      "properties": {
+        "field": { "type": "array", "items": { "type": "string" } },
+        "value": { "type": "integer", "minimum": 1 },
+        "cardinality": { "type": "array" }
+      }
+    },
+    "new_terms_fields": { "type": "array", "items": { "type": "string" } },
+    "history_window_start": { "type": "string" },
+    "machine_learning_job_id": { "type": "array", "items": { "type": "string" } },
+    "anomaly_threshold": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "threat_index": { "type": "array", "items": { "type": "string" } },
+    "threat_query": { "type": "string" },
+    "threat_mapping": { "type": "array" },
+    "threat_language": { "type": "string" },
+    "threat_indicator_path": { "type": "string" },
+
+    "rule_name_override": { "type": "string" },
+    "timestamp_override": { "type": "string" },
+    "building_block_type": { "type": "string" },
+    "investigation_fields": { "type": "object" },
+
+    "threat": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["framework", "tactic"],
+        "properties": {
+          "framework": { "const": "MITRE ATT&CK" },
+          "tactic": {
+            "type": "object",
+            "required": ["id", "name", "reference"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^TA\\d{4}$" },
+              "name": { "type": "string" },
+              "reference": { "type": "string" }
+            }
+          },
+          "technique": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "name", "reference"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^T\\d{4}$" },
+                "name": { "type": "string" },
+                "reference": { "type": "string" },
+                "subtechnique": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "name", "reference"],
+                    "properties": {
+                      "id": { "type": "string", "pattern": "^T\\d{4}\\.\\d{3}$" },
+                      "name": { "type": "string" },
+                      "reference": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "exceptions": { "type": "array", "items": { "type": "string" } },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["connector"],
+        "properties": {
+          "connector": { "type": "string" },
+          "action_type_id": { "type": "string" },
+          "group": { "type": "string" },
+          "params": { "type": "object" }
+        }
+      }
+    },
+
+    "targets": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Which clusters this rule deploys to."
+    },
+    "source_file": { "type": "string" }
+  }
+}

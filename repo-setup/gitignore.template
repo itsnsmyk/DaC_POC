@@ -1,0 +1,45 @@
+# --- secrets: never commit -------------------------------------------------
+.env
+*.auto.tfvars
+targets/local-*.tfvars
+**/secrets/
+*.pem
+*.key
+*.p12
+credentials.json
+
+# --- terraform -------------------------------------------------------------
+.terraform/
+.terraform.lock.hcl.bak
+*.tfstate
+*.tfstate.*
+*.tfplan
+backend_override.tf
+override.tf
+*_override.tf
+!versions_override.tf.example
+crash.log
+crash.*.log
+
+# --- pipeline artefacts ----------------------------------------------------
+build/
+plan-*.json
+plan-*.txt
+provenance.json
+rule-index-*.json
+
+# migration/ is NOT ignored: mapping.csv is the record of which Kibana UUID
+# became which rule file, which is migration evidence worth keeping.
+
+# --- python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- editors / os ----------------------------------------------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp

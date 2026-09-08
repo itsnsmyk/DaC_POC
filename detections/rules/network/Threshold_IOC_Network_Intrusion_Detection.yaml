@@ -1,0 +1,47 @@
+# Migrated from a4f1c2d3-9e8b-4a71-b0c5-1d2e3f4a5b6c.json
+# rule_id is the identity Kibana already knows this rule by - do not edit it.
+# uid is the Terraform key. Rename the FILE freely; renaming the uid
+# requires a `moved` block (see README section 2).
+uid: threshold-ioc-network-intrusion-detection
+rule_id: a4f1c2d3-9e8b-4a71-b0c5-1d2e3f4a5b6c
+name: Threshold IOC Network Intrusion Detection
+description: Fires when a host contacts more than 10 distinct known-bad destinations from the threat feed
+  within the interval.
+type: threshold
+language: kuery
+query: threat.indicator.type:* and network.direction:outbound
+index:
+- logs-network_traffic.*
+- logs-endpoint.events.network-*
+threshold:
+  field:
+  - host.name
+  value: 10
+severity: critical
+risk_score: 88
+interval: 10m
+from: now-15m
+tags:
+- 'Domain: Network'
+- 'Use Case: Threat Detection'
+false_positives:
+- Security scanners with feed-matching egress
+references:
+- https://attack.mitre.org/techniques/T1071/
+threat:
+- framework: MITRE ATT&CK
+  tactic:
+    id: TA0011
+    name: Command and Control
+    reference: https://attack.mitre.org/tactics/TA0011/
+  technique:
+  - id: T1071
+    name: Application Layer Protocol
+    reference: https://attack.mitre.org/techniques/T1071/
+exceptions:
+- svc-account-interactive-login
+actions:
+- connector: TODO_map_connector_4a1f2b8c
+  group: default
+  params:
+    summary: '{{context.rule.name}}'

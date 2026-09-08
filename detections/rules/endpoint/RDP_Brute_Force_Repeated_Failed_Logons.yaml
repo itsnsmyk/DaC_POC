@@ -1,0 +1,49 @@
+uid: win-rdp-bruteforce-threshold
+
+name: "RDP Brute Force - Repeated Failed Logons"
+description: |
+  Threshold rule firing when a single source IP generates 20 or more failed
+  RDP logons (event 4625, logon type 10) against one host within the interval.
+
+type: threshold
+language: kuery
+index:
+  - "logs-system.security-*"
+query: 'event.code:"4625" and winlog.logon.type:"RemoteInteractive"'
+
+threshold:
+  field:
+    - "source.ip"
+    - "host.name"
+  value: 20
+
+severity: high
+risk_score: 73
+interval: "10m"
+from: "now-15m"
+
+tags:
+  - "Domain: Endpoint"
+  - "OS: Windows"
+  - "Tactic: Credential Access"
+
+false_positives:
+  - "Vulnerability scanners and authenticated pen-test activity"
+
+references:
+  - "https://attack.mitre.org/techniques/T1110/"
+
+threat:
+  - framework: "MITRE ATT&CK"
+    tactic:
+      id: "TA0006"
+      name: "Credential Access"
+      reference: "https://attack.mitre.org/tactics/TA0006/"
+    technique:
+      - id: "T1110"
+        name: "Brute Force"
+        reference: "https://attack.mitre.org/techniques/T1110/"
+
+# Deploy to DC only until tuned; flip to both once FP rate is acceptable.
+targets:
+  - dc

@@ -1,0 +1,42 @@
+uid: lnx-curl-download-to-tmp
+
+name: "Curl or Wget Download Into World-Writable Path"
+description: |
+  Identifies curl/wget writing a file into /tmp, /dev/shm or /var/tmp. Commonly
+  seen in the staging phase of Linux intrusions immediately before execution.
+
+type: eql
+language: eql
+index:
+  - "logs-endpoint.events.process-*"
+query: |
+  process where event.type == "start" and
+    process.name in ("curl", "wget") and
+    process.args : ("/tmp/*", "/dev/shm/*", "/var/tmp/*")
+
+severity: medium
+risk_score: 47
+interval: "5m"
+from: "now-9m"
+
+tags:
+  - "Domain: Endpoint"
+  - "OS: Linux"
+  - "Tactic: Command and Control"
+
+false_positives:
+  - "Configuration management tooling staging artifacts in /tmp"
+
+references:
+  - "https://attack.mitre.org/techniques/T1105/"
+
+threat:
+  - framework: "MITRE ATT&CK"
+    tactic:
+      id: "TA0011"
+      name: "Command and Control"
+      reference: "https://attack.mitre.org/tactics/TA0011/"
+    technique:
+      - id: "T1105"
+        name: "Ingress Tool Transfer"
+        reference: "https://attack.mitre.org/techniques/T1105/"

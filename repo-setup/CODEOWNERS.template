@@ -1,0 +1,21 @@
+# Path decides who reviews. This is the main payoff of separating the content
+# plane from the infrastructure plane: a rule tuning PR needs a detection
+# engineer, a change to rules.tf needs platform review.
+#
+# Replace these team handles with your own before committing.
+
+*                               @your-org/soc-leads
+
+/detections/rules/endpoint/     @your-org/soc-endpoint-detections
+/detections/rules/identity/     @your-org/soc-identity-detections
+/detections/rules/network/      @your-org/soc-network-detections
+/detections/rules/cloud/        @your-org/soc-cloud-detections
+/detections/exceptions/         @your-org/soc-leads
+
+# Changing the schema changes what every future rule is allowed to be.
+/detections/schemas/            @your-org/soc-leads @your-org/platform-engineering
+
+/terraform/                     @your-org/platform-engineering
+/tools/                         @your-org/platform-engineering
+/Jenkinsfile                    @your-org/platform-engineering
+/local/                         @your-org/platform-engineering

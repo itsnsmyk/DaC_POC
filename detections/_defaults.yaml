@@ -1,0 +1,13 @@
+# Repo-wide defaults. Every rule inherits these; any key set in a rule file wins.
+# Shallow merge only - do not nest deeply here.
+author:
+  - "SOC Detection Engineering"
+license: "Elastic License v2"
+enabled: true
+interval: "5m"
+from: "now-9m"
+to: "now"
+max_signals: 100
+targets:
+  - dc
+  - dr

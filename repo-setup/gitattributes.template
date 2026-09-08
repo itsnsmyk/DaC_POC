@@ -1,0 +1,14 @@
+# Rule content is text and must diff cleanly in review.
+*.yaml   text eol=lf
+*.yml    text eol=lf
+*.json   text eol=lf
+*.tf     text eol=lf
+*.tfvars text eol=lf
+*.hcl    text eol=lf
+*.py     text eol=lf
+*.sh     text eol=lf
+Jenkinsfile text eol=lf
+Makefile    text eol=lf
+
+# Generated - collapse in PR views so reviewers look at the rule, not the lockfile.
+detections/rules.lock.json linguist-generated=true
