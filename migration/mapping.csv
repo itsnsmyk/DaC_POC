@@ -1,3 +1,1 @@
-old_file,kibana_id,rule_id,new_file,uid,name,type,enabled
-a4f1c2d3-9e8b-4a71-b0c5-1d2e3f4a5b6c.json,8b7c6d5e-4f3a-2b1c-9d8e-7f6a5b4c3d2e,a4f1c2d3-9e8b-4a71-b0c5-1d2e3f4a5b6c,/tmp/mig-out/network/Threshold_IOC_Network_Intrusion_Detection.yaml,threshold-ioc-network-intrusion-detection,Threshold IOC Network Intrusion Detection,threshold,True
-f2e1d0c9-8b7a-4695-a4b3-c2d1e0f9a8b7.json,1a2b3c4d-5e6f-4708-9a0b-1c2d3e4f5a6b,f2e1d0c9-8b7a-4695-a4b3-c2d1e0f9a8b7,/tmp/mig-out/windows/Suspicious_LSASS_Memory_Access_Via_DLL_Injection.yaml,suspicious-lsass-memory-access-via-dll-injection,Suspicious LSASS Memory Access via DLL Injection,eql,True
+old_file

@@ -113,6 +113,16 @@ resource "elasticstack_kibana_security_detection_rule" "this" {
       action_type_id = var.connector_ids[a.connector].action_type_id
       id             = var.connector_ids[a.connector].id
       group          = try(a.group, "default")
+      # Kibana assigns `frequency` server-side if you omit it, which makes every
+      # subsequent plan report a change that applying never resolves. Setting it
+      # explicitly to the same defaults Kibana would pick keeps plans clean, and
+      # makes the notification cadence reviewable in the rule YAML rather than
+      # an invisible server default.
+      frequency = {
+        summary     = try(a.frequency.summary, true)
+        notify_when = try(a.frequency.notify_when, "onActiveAlert")
+        throttle    = try(a.frequency.throttle, "")
+      }
       params         = jsonencode(try(a.params, {}))
     }
   ]
