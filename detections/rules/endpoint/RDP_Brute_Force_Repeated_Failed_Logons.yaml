@@ -44,6 +44,3 @@ threat:
         name: "Brute Force"
         reference: "https://attack.mitre.org/techniques/T1110/"
 
-# Deploy to DC only until tuned; flip to both once FP rate is acceptable.
-targets:
-  - dc

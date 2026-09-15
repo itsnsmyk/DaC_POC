@@ -1,0 +1,24 @@
+uid: test-rule-dac-exceptions
+list_id: test-rule-dac-exceptions
+name: Test Rule DAC Exceptions
+description: >
+  Recovered from a rule_default list (7e81f699-4cf8-43a3-ab0c-34144f509d23)
+  created via the Kibana UI by elastic on 2026-09-09T09:14:13Z and detached by
+  a Terraform apply six minutes later. Converted to a shared list so it is
+  reviewable, versioned, and deploys to every target.
+type: detection
+namespace_type: single
+tags: ["adopted-from-ui"]
+
+items:
+  - uid: et1
+    item_id: et1-source-ip
+    name: ET1
+    description: "Suppresses alerts from source.ip 35.205.206.84. Originally created by elastic 2026-09-09."
+    type: simple
+    namespace_type: single
+    entries:
+      - field: source.ip
+        type: match
+        operator: included
+        value: 35.205.206.84

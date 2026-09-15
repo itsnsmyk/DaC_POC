@@ -46,6 +46,21 @@ $TF validate && ok || bad validate
 
 [[ -n "$FAILED" ]] && { printf '\n\033[31mPre-checks failed:%s\033[0m\n' "$FAILED"; exit 1; }
 
+# An object can exist in Kibana while being absent from Terraform state - most
+# often a rule adopted from the UI whose `terraform import` was never run. Plan
+# is happy to create it; apply then hits 409 and aborts partway. Reconciling
+# first turns that into a no-op.
+#
+# Only objects already described by a rule file are imported. A rule in Kibana
+# with no file stays unmanaged and is reported by postcheck, because silently
+# adopting unreviewed detection logic would defeat the point of the review gate.
+reconcile_target(){
+  local t="$1"
+  $TF init -reconfigure -input=false -backend-config="path=state/${t}.tfstate" >/dev/null
+  python3 tools/reconcile_state.py --cluster "$t" \
+    --var-file "targets/vps-${t}.tfvars" --apply || return 1
+}
+
 plan_target(){
   local t="$1"
   # -reconfigure per target is what swaps the state file. Same shape as the
@@ -56,14 +71,17 @@ plan_target(){
   python3 tools/plan_guard.py "$TFD/plan-${t}.json" --max-destroy 3
 }
 
-stage "3  Plan DC"; plan_target dc && ok || bad plan-dc
-stage "4  Plan DR"; plan_target dr && ok || bad plan-dr
+stage "3  Reconcile state with Kibana"
+reconcile_target dc && reconcile_target dr && ok || bad reconcile
+
+stage "4  Plan DC"; plan_target dc && ok || bad plan-dc
+stage "5  Plan DR"; plan_target dr && ok || bad plan-dr
 
 [[ -n "$FAILED" ]] && { printf '\n\033[31mPlan failed:%s\033[0m\n' "$FAILED"; exit 1; }
 [[ $PLAN_ONLY -eq 1 ]] && { printf '\n\033[32mPlan-only complete.\033[0m\n'; exit 0; }
 
 if [[ $AUTO -eq 0 ]]; then
-  stage "5  Approval"
+  stage "6  Approval"
   read -r -p "Apply to DC and DR? [y/N] " reply
   [[ "$reply" == "y" ]] || { echo aborted; exit 0; }
 fi
@@ -74,17 +92,17 @@ apply_target(){
   $TF apply -input=false -auto-approve "${t}.tfplan"
 }
 
-stage "6  Apply DC"; apply_target dc && ok || bad apply-dc
+stage "7  Apply DC"; apply_target dc && ok || bad apply-dc
 [[ -n "$FAILED" ]] && { echo "DC failed - not touching DR"; exit 1; }
 
-stage "7  Post-check DC"
+stage "8  Post-check DC"
 python3 tools/postcheck.py --cluster dc --settle 90 && ok || bad postcheck-dc
 
-stage "8  Apply DR"; apply_target dr && ok || bad apply-dr
-stage "9  Post-check DR"
+stage "9  Apply DR"; apply_target dr && ok || bad apply-dr
+stage "10 Post-check DR"
 python3 tools/postcheck.py --cluster dr --settle 90 && ok || bad postcheck-dr
 
-stage "10 DC/DR parity"
+stage "11 DC/DR parity"
 python3 tools/drift_compare.py --left dc --right dr --show-diff && ok || bad parity
 
 if [[ -n "$FAILED" ]]; then

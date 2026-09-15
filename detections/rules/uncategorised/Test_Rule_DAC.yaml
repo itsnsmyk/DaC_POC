@@ -1,14 +1,14 @@
 # Adopted from the Kibana UI on cluster 'dc'.
-# Originally created by elastic on 2026-09-08T13:08:45.
+# Originally created by elastic on 2026-09-09T04:27:00.
 # rule_id preserved, so Terraform adopts the live rule rather than
 # recreating it. Review before merging.
-uid: suspicious-rdp-login-ti-match
-rule_id: e1540397-2957-4ca6-8747-f2c2de0dc570
-name: Suspicious RDP Login - TI Match
-description: Suspicious RDP Login - TI Match
+uid: test-rule-dac
+rule_id: bfa7e23d-2344-47a0-ada3-d3be9d66762a
+name: 'Test Rule DAC '
+description: Test Rule DAC - Made to test DAC Capabiities of importing UI made rules.
 type: query
 language: kuery
-query: 'source.ip: "45.148.10.141" and destination.port: "3389"'
+query: 'source.ip: "34.76.180.101" AND error.code : "0"'
 index:
 - apm-*-transaction*
 - auditbeat-*
@@ -22,3 +22,6 @@ index:
 severity: low
 risk_score: 21
 from: now-6m
+
+exceptions:
+  - test-rule-dac-exceptions

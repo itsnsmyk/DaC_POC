@@ -2,7 +2,7 @@ output "rule_index" {
   description = "uid -> {rule_id, kibana_id, name, enabled}. Consumed by the post-check script."
   value = {
     for uid, r in elasticstack_kibana_security_detection_rule.this : uid => {
-      rule_id   = uuidv5(var.rule_id_namespace, uid)
+      rule_id   = r.rule_id
       kibana_id = r.id
       name      = r.name
       enabled   = r.enabled

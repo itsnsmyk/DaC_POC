@@ -3,6 +3,7 @@
   "rules": {
     "lnx-curl-download-to-tmp": "04273b1f-628a-5a96-81b9-e4b15a5c94bf",
     "suspicious-rdp-login-ti-match": "e1540397-2957-4ca6-8747-f2c2de0dc570",
+    "test-rule-dac": "bfa7e23d-2344-47a0-ada3-d3be9d66762a",
     "threshold-ioc-network-intrusion-detection": "a4f1c2d3-9e8b-4a71-b0c5-1d2e3f4a5b6c",
     "win-rdp-bruteforce-threshold": "b7e7092b-9e6f-55be-8044-2dbb58b557ea",
     "win-svc-account-interactive-login": "bfa04bf9-5433-5694-b03e-cebfe66a9ad0"
@@ -10,6 +11,7 @@
   "sources": {
     "lnx-curl-download-to-tmp": "derived",
     "suspicious-rdp-login-ti-match": "explicit",
+    "test-rule-dac": "explicit",
     "threshold-ioc-network-intrusion-detection": "explicit",
     "win-rdp-bruteforce-threshold": "derived",
     "win-svc-account-interactive-login": "derived"
