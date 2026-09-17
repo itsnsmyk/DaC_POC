@@ -16,26 +16,6 @@ with pre-checks, a blast-radius guard, post-checks and a cross-cluster parity pr
 | Deep nesting (MITRE threat → technique → subtechnique) | verbose | awkward for arrays of tables | **clean** |
 | Diff readability in a PR | poor | good | **good** |
 
-JSON is out: no comments, and a 15-line EQL query becomes one unreadable escaped string —
-exactly the reason your UUID-named files were painful to review.
-
-TOML is the format Elastic's own [`detection-rules`](https://github.com/elastic/detection-rules)
-repo uses, which matters if you ever want its authoring/validation CLI. But **Terraform has
-no `tomldecode`**, so choosing TOML means a conversion step between the source of truth and
-the IaC — one more thing to break. YAML is decoded natively by `yamldecode()`, so the file on
-disk *is* the input to the resource, with no intermediate artifact.
-
-**Portability, the requirement you actually asked about:** nothing in `rules/*.yaml` is
-Terraform-specific. There are no HCL expressions, no `${}`, no provider attribute names that
-don't also exist in the Kibana API. If you replace Terraform with Ansible, a Python
-Kibana-API pusher, or `detection-rules`, you rewrite `terraform/` and keep `rules/` untouched.
-That is the whole point of keeping logic in data files rather than in `.tf`.
-
-If you later want `detection-rules` for authoring, add a ~40-line `scripts/toml_to_yaml.py`
-and keep YAML as the committed source of truth. Don't make TOML the primary format.
-
----
-
 ## 2. Fixing the UUID problem
 
 ### What changes on disk
